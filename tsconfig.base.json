@@ -8,17 +8,27 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
-    "lib": ["es2020", "dom"],
+
+    // Modern baseline (ES2022 = latest stable async features)
+    "target": "es2022",
+    "module": "commonjs",
+
+    "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+
     "baseUrl": ".",
     "typeRoots": ["./types", "./node_modules/@types"],
+
+    // ✅ Add Node global types
+    "types": ["node"],
+
+    // ✅ Path aliases for Nx libs
     "paths": {
       "@vettech/auth": ["libs/auth/src/index.ts"],
       "@vettech/data": ["libs/data/src/index.ts"],
-      "@vettech/ui": ["libs/ui/src/index.ts"]
+      "@vettech/ui": ["libs/ui/src/index.ts"],
+      "@vettech/*": ["libs/*/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
