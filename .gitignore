@@ -1,18 +1,35 @@
-# Node / Nx / Nest
+# Node / Nx / Nest build artifacts
 node_modules/
 dist/
 .tmp/
 tmp/
 coverage/
 *.log
+
+# Nx & Angular caches
+.nx/
+.angular/
+.angular/cache/
 .nx/cache/
-.husky/
-# IDE
-.vscode/
-# Env & DB
+
+# Environment & local data
 .env
+*.env.*
 *.db
 dev.db
-# Angular build
+
+# IDE & editor cruft
+.vscode/
+.idea/
+.DS_Store
+
+# Angular / Frontend build output
 apps/**/build/
 apps/**/dist/
+
+# Husky & Git hooks (regenerate locally)
+.husky/
+
+# TypeScript / test output
+*.tsbuildinfo
+jest-cache/
