@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-base-200 p-6">
+  <div class="mx-auto max-w-3xl space-y-6 rounded-2xl bg-base-100 p-8 shadow">
+    <header class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold">Task details</h1>
+        <p class="text-sm text-base-content/70">Update copy, category, or status.</p>
+      </div>
+      <a class="btn btn-ghost" routerLink="/tasks">Back</a>
+    </header>
+
+    <form (ngSubmit)="save()" [formGroup]="form" class="grid gap-5 md:grid-cols-2">
+      <label class="form-control md:col-span-2">
+        <span class="label-text">Title</span>
+        <input class="input input-bordered" formControlName="title" />
+      </label>
+      <label class="form-control md:col-span-2">
+        <span class="label-text">Description</span>
+        <textarea class="textarea textarea-bordered" formControlName="description" rows="4"></textarea>
+      </label>
+      <label class="form-control">
+        <span class="label-text">Category</span>
+        <select class="select select-bordered" formControlName="category">
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </label>
+      <label class="form-control">
+        <span class="label-text">Status</span>
+        <select class="select select-bordered" formControlName="status">
+          <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+        </select>
+      </label>
+      <div class="md:col-span-2 flex justify-end gap-3">
+        <button class="btn btn-primary" type="submit" [disabled]="saving()">Save changes</button>
+      </div>
+    </form>
+
+    <div *ngIf="error()" class="alert alert-error">{{ error() }}</div>
+  </div>
+</div>

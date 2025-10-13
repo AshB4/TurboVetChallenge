@@ -1,0 +1,13 @@
+<section class="task-list">
+  <header class="task-list__header" *ngIf="title">
+    <h2>{{ title }}</h2>
+  </header>
+
+  <div class="task-list__items" *ngIf="tasks.length; else empty">
+    <tvfe-task-card *ngFor="let task of tasks; trackBy: trackByTask" [task]="task" />
+  </div>
+
+  <ng-template #empty>
+    <p class="task-list__empty">{{ emptyMessage }}</p>
+  </ng-template>
+</section>

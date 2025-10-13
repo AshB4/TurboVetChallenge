@@ -1,0 +1,22 @@
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.task-list__header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.task-list__items {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-list__empty {
+  color: #94a3b8;
+  font-style: italic;
+}

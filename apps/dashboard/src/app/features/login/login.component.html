@@ -1,0 +1,57 @@
+<div class="min-h-screen flex items-center justify-center bg-base-200 p-6">
+  <form
+    (ngSubmit)="submit()"
+    [formGroup]="form"
+    class="w-full max-w-md space-y-6 rounded-2xl bg-base-100 p-8 shadow-xl"
+  >
+    <header class="space-y-2 text-center">
+      <h1 class="text-3xl font-semibold text-primary">VetTech Command Center</h1>
+      <p class="text-base-content/70">Secure task management for various teams</p>
+    </header>
+
+    <div class="space-y-4">
+      <label class="form-control w-full">
+        <span class="label">
+          <span class="label-text">Email</span>
+        </span>
+        <input
+          class="input input-bordered w-full"
+          formControlName="username"
+          placeholder="owner@turbovet.test"
+          type="email"
+        />
+        <span class="label" *ngIf="form.controls.username.invalid && form.controls.username.touched">
+          <span class="label-text-alt text-error">Valid email is required.</span>
+        </span>
+      </label>
+
+      <label class="form-control w-full">
+        <span class="label">
+          <span class="label-text">Password</span>
+        </span>
+        <input
+          class="input input-bordered w-full"
+          formControlName="password"
+          placeholder="••••••••"
+          type="password"
+        />
+        <span class="label" *ngIf="form.controls.password.invalid && form.controls.password.touched">
+          <span class="label-text-alt text-error">Password must be at least 6 characters.</span>
+        </span>
+      </label>
+    </div>
+
+    <div class="space-y-2">
+      <button class="btn btn-primary w-full" [disabled]="loading()">
+        <span *ngIf="!loading(); else loadingTpl">Sign in</span>
+      </button>
+      <ng-template #loadingTpl>
+        <span class="loading loading-spinner"></span>
+      </ng-template>
+      <p class="text-error" *ngIf="error() as message">{{ message }}</p>
+      <p class="text-xs text-base-content/60">
+        Demo credentials: owner@turbovet.test / admin@turbovet.test / viewer@turbovet.test — password: P@ssw0rd!
+      </p>
+    </div>
+  </form>
+</div>

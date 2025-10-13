@@ -1,0 +1,135 @@
+<div class="min-h-screen bg-base-200 p-6">
+  <header class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h1 class="text-3xl font-semibold text-primary">Task workspace</h1>
+      <p class="text-base-content/70">Monitor assignments across the VetTech organization.</p>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="badge badge-outline">{{ auth.currentUser?.username }}</span>
+      <button class="btn btn-ghost btn-sm" (click)="auth.logout()">Logout</button>
+    </div>
+  </header>
+
+  <section *ngIf="canMutate()" class="mt-6 rounded-2xl bg-base-100 p-6 shadow">
+    <h2 class="text-xl font-medium">Create task</h2>
+    <form (ngSubmit)="createTask()" [formGroup]="createForm" class="mt-4 grid gap-4 md:grid-cols-3">
+      <label class="form-control">
+        <span class="label-text">Title</span>
+        <input class="input input-bordered" formControlName="title" placeholder="Call supplier" />
+      </label>
+      <label class="form-control md:col-span-2">
+        <span class="label-text">Description</span>
+        <textarea class="textarea textarea-bordered" formControlName="description" rows="1"></textarea>
+      </label>
+      <label class="form-control">
+        <span class="label-text">Category</span>
+        <select class="select select-bordered" formControlName="category">
+          <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
+        </select>
+      </label>
+      <div class="md:col-span-2 flex items-center justify-end">
+        <button class="btn btn-primary" type="submit">Add Task</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="stats bg-base-100 shadow">
+      <div class="stat">
+        <div class="stat-title">Completion</div>
+        <div class="stat-value">
+          <span
+            class="radial-progress text-primary"
+            [style.--value]="store.completionRate()"
+            [attr.aria-valuenow]="store.completionRate()"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            {{ store.completionRate() }}%
+          </span>
+        </div>
+        <div class="stat-desc">
+          {{ store.doneCount() }} of {{ store.totalCount() }} tasks completed
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div class="flex flex-wrap items-center gap-2">
+      <button
+        class="btn btn-sm"
+        [class.btn-primary]="store.categoryFilter() === 'ALL'"
+        type="button"
+        (click)="setCategoryFilter('ALL')"
+      >
+        All
+      </button>
+      <button
+        *ngFor="let category of categories"
+        class="btn btn-sm"
+        [class.btn-primary]="store.categoryFilter() === category"
+        type="button"
+        (click)="setCategoryFilter(category)"
+      >
+        {{ category }}
+      </button>
+    </div>
+    <button class="btn btn-ghost btn-sm" type="button" (click)="toggleSort()">
+      Sort {{ store.sortDescending() ? 'newest' : 'oldest' }} first
+    </button>
+  </section>
+
+  <section class="mt-6" *ngIf="store.error()">
+    <div class="alert alert-error">{{ store.error() }}</div>
+  </section>
+
+  <section class="mt-6" *ngIf="store.loading()">
+    <div class="alert alert-info">
+      <span class="loading loading-spinner mr-2"></span>
+      Loading tasks...
+    </div>
+  </section>
+
+  <section class="mt-6 grid gap-6 md:grid-cols-3">
+    <div *ngFor="let column of statuses" class="space-y-3">
+      <header>
+        <h3 class="text-lg font-semibold">{{ column.title }}</h3>
+        <p class="text-sm text-base-content/70">{{ column.description }}</p>
+      </header>
+      <div
+        cdkDropList
+        [cdkDropListData]="tasksFor(column.status)"
+        (cdkDropListDropped)="drop($event, column.status)"
+        class="flex flex-col gap-3"
+      >
+        <article
+          *ngFor="let task of tasksFor(column.status)"
+          cdkDrag
+          [cdkDragData]="task"
+          class="rounded-xl bg-base-100 p-4 shadow"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h4 class="text-lg font-medium">{{ task.title }}</h4>
+              <p class="mt-1 text-sm text-base-content/70">{{ task.description }}</p>
+            </div>
+            <span class="badge badge-outline">{{ task.category }}</span>
+          </div>
+          <footer class="mt-4 flex items-center justify-between text-xs text-base-content/60">
+            <a class="link" [routerLink]="['/tasks', task.id]">Edit</a>
+            <div class="flex items-center gap-2">
+              <span>Updated {{ task.updatedAt | date: 'short' }}</span>
+              <button *ngIf="canMutate()" class="btn btn-ghost btn-xs" type="button" (click)="deleteTask(task)">
+                Delete
+              </button>
+            </div>
+          </footer>
+        </article>
+        <p *ngIf="!tasksFor(column.status).length" class="rounded-xl border border-dashed border-base-300 p-6 text-center text-sm">
+          Drop tasks here to change their status.
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
