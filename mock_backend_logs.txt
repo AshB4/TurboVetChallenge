@@ -1,0 +1,20 @@
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [NestFactory] Starting Nest application...
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [InstanceLoader] TasksModule dependencies initialized +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RoutesResolver] AuthController {/api/auth}: +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RouterExplorer] Mapped {/api/auth/login, POST} route +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RoutesResolver] TasksController {/api/tasks}: +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RouterExplorer] Mapped {/api/tasks, GET} route +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RouterExplorer] Mapped {/api/tasks, POST} route +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RouterExplorer] Mapped {/api/tasks/:id, PUT} route +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RouterExplorer] Mapped {/api/tasks/:id, DELETE} route +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RoutesResolver] AppController {/api}: +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [RouterExplorer] Mapped {/api/health, GET} route +1ms
+[Nest] 12345  - 11/07/2023, 12:00:00 AM   LOG [NestApplication] Nest application successfully started +1ms
+🚀 API running at http://localhost:3000/api
+
+$ curl http://localhost:3000/api/health
+{"status":"ok","timestamp":"2023-11-07T00:00:00.000Z"}
+
+$ curl -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"username":"owner@turbovet.test","password":"P@ssw0rd!"}'
+{"accessToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."}

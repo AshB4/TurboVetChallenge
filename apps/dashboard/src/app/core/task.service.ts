@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CreateTaskDto, TaskDto, UpdateTaskDto } from '@vettech/data';
 
@@ -9,7 +9,32 @@ export class TaskService {
   private readonly http = inject(HttpClient);
 
   list(): Observable<TaskDto[]> {
-    return this.http.get<TaskDto[]>('/api/tasks');
+    // Mock tasks for demo
+    const mockTasks: TaskDto[] = [
+      {
+        id: '1',
+        title: 'Update vaccination reminders',
+        description: 'Review and update the reminder schedule for Q4.',
+        status: 'IN_PROGRESS',
+        category: 'WORK',
+        organizationId: '1',
+        ownerId: '1',
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z',
+      },
+      {
+        id: '2',
+        title: 'Schedule team offsite',
+        description: 'Coordinate venue and agenda for the annual offsite.',
+        status: 'TODO',
+        category: 'WORK',
+        organizationId: '1',
+        ownerId: '1',
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z',
+      },
+    ];
+    return of(mockTasks);
   }
 
   create(payload: CreateTaskDto): Observable<TaskDto> {

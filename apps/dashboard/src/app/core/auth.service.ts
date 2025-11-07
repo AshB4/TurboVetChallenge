@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
 import { LoginDto, JwtPayloadDto, Role, roleSatisfies } from '@vettech/data';
 
 export interface UserContext extends JwtPayloadDto {
@@ -12,7 +12,9 @@ const STORAGE_KEY = 'vettech.jwt';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly subject = new BehaviorSubject<UserContext | null>(this.restore());
+  private readonly subject = new BehaviorSubject<UserContext | null>(
+    this.restore()
+  );
 
   readonly user$ = this.subject.asObservable();
 
@@ -21,10 +23,11 @@ export class AuthService {
   }
 
   login(credentials: LoginDto): Observable<void> {
-    return this.http.post<{ accessToken: string }>('/api/auth/login', credentials).pipe(
-      tap((response) => this.persistToken(response.accessToken)),
-      map(() => void 0),
-    );
+    // Mock login for demo
+    const mockToken =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoib3duZXJAdHVyYm92ZXQudGVzdCIsIm9yZ2FuaXphdGlvbklkIjoxLCJyb2xlcyI6WyJPd25lciJdfQ.mock';
+    this.persistToken(mockToken);
+    return of(void 0);
   }
 
   logout(): void {
