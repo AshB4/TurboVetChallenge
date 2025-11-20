@@ -2,7 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CreateTaskDto, TaskDto, UpdateTaskDto } from '@vettech/data';
+import {
+  CreateTaskDto,
+  TaskDto,
+  UpdateTaskDto,
+  TaskStatus,
+  TaskCategory,
+} from '@vettech/data';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
@@ -15,8 +21,8 @@ export class TaskService {
         id: '1',
         title: 'Update vaccination reminders',
         description: 'Review and update the reminder schedule for Q4.',
-        status: 'IN_PROGRESS',
-        category: 'WORK',
+        status: TaskStatus.IN_PROGRESS,
+        category: TaskCategory.WORK,
         organizationId: '1',
         ownerId: '1',
         createdAt: '2023-01-01T00:00:00.000Z',
@@ -26,8 +32,8 @@ export class TaskService {
         id: '2',
         title: 'Schedule team offsite',
         description: 'Coordinate venue and agenda for the annual offsite.',
-        status: 'TODO',
-        category: 'WORK',
+        status: TaskStatus.TODO,
+        category: TaskCategory.WORK,
         organizationId: '1',
         ownerId: '1',
         createdAt: '2023-01-01T00:00:00.000Z',

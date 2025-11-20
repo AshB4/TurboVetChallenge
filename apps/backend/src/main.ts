@@ -1,3 +1,6 @@
+import { webcrypto } from 'crypto';
+globalThis.crypto = webcrypto as any;
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { INestApplication } from '@nestjs/common';
@@ -8,6 +11,9 @@ async function bootstrap() {
   // Make all routes available under /api while allowing /json to stay public
   app.setGlobalPrefix('api', { exclude: ['json'] });
 
+  // Enable graceful shutdown
+  app.enableShutdownHooks();
+
   // Start server
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(port);
@@ -16,6 +22,18 @@ async function bootstrap() {
   printRoutes(app);
 
   console.log(`🚀 API running at http://localhost:${port}/api`);
+
+  // Graceful shutdown on SIGINT/SIGTERM
+  process.on('SIGINT', async () => {
+    console.log('Shutting down gracefully...');
+    await app.close();
+    process.exit(0);
+  });
+  process.on('SIGTERM', async () => {
+    console.log('Shutting down gracefully...');
+    await app.close();
+    process.exit(0);
+  });
 }
 
 function printRoutes(app: INestApplication) {

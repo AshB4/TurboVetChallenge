@@ -7,7 +7,11 @@ import { RbacGuard } from './rbac.guard';
 
 const makeContext = (
   userRoles: Role[] | undefined,
-  options: { method?: string; path?: string; organizationId?: string | null } = {},
+  options: {
+    method?: string;
+    path?: string;
+    organizationId?: string | null;
+  } = {}
 ) =>
   ({
     switchToHttp: () => ({
@@ -19,7 +23,8 @@ const makeContext = (
           ? {
               sub: '123',
               username: 'user',
-              organizationId: options.organizationId ?? 'org-1',
+              organizationId:
+                'organizationId' in options ? options.organizationId : 'org-1',
               roles: userRoles,
             }
           : undefined,
@@ -29,16 +34,22 @@ const makeContext = (
     getHandler: () => ({}),
   } as any);
 
-const mockMetadata = (reflector: Reflector, roles: Role[] | undefined, isPublic = false) => {
-  (reflector.getAllAndOverride as jest.Mock).mockImplementation((key: string) => {
-    if (key === ROLES_KEY) {
-      return roles;
+const mockMetadata = (
+  reflector: Reflector,
+  roles: Role[] | undefined,
+  isPublic = false
+) => {
+  (reflector.getAllAndOverride as jest.Mock).mockImplementation(
+    (key: string) => {
+      if (key === ROLES_KEY) {
+        return roles;
+      }
+      if (key === IS_PUBLIC_KEY) {
+        return isPublic;
+      }
+      return undefined;
     }
-    if (key === IS_PUBLIC_KEY) {
-      return isPublic;
-    }
-    return undefined;
-  });
+  );
 };
 
 describe('RbacGuard', () => {
@@ -126,18 +137,22 @@ describe('RbacGuard', () => {
     },
   ];
 
-  decisionTable.forEach(({ description, candidate, required, method, path, allowed }) => {
-    it(`${allowed ? 'allows' : 'blocks'} ${candidate} when ${description}`, () => {
-      mockMetadata(reflector, [required]);
-      const context = makeContext([candidate], { method, path });
-      if (allowed) {
-        expect(guard.canActivate(context)).toBe(true);
-      } else {
-        expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
-      }
-      jest.clearAllMocks();
-    });
-  });
+  decisionTable.forEach(
+    ({ description, candidate, required, method, path, allowed }) => {
+      it(`${
+        allowed ? 'allows' : 'blocks'
+      } ${candidate} when ${description}`, () => {
+        mockMetadata(reflector, [required]);
+        const context = makeContext([candidate], { method, path });
+        if (allowed) {
+          expect(guard.canActivate(context)).toBe(true);
+        } else {
+          expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
+        }
+        jest.clearAllMocks();
+      });
+    }
+  );
 
   it('allows public routes without user context', () => {
     mockMetadata(reflector, undefined, true);
@@ -154,7 +169,9 @@ describe('RbacGuard', () => {
   it('blocks requests missing organization context', () => {
     mockMetadata(reflector, [Role.VIEWER]);
     const context = makeContext([Role.VIEWER], { organizationId: null });
-    expect(() => guard.canActivate(context)).toThrow('Missing organization context');
+    expect(() => guard.canActivate(context)).toThrow(
+      'Missing organization context'
+    );
   });
 
   it('blocks requests for users without roles', () => {

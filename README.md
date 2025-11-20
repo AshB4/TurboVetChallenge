@@ -19,15 +19,15 @@ The workspace uses Nx to co-locate backend and frontend apps with shared TypeScr
 
 ```
 apps/
-  api/          NestJS REST API (JWT auth, RBAC guards)
-  dashboard/    Angular dashboard (task board, audit views)
+  backend/      NestJS REST API (JWT auth, RBAC guards)
+  frontend/     Angular dashboard (task board, audit views)
 libs/
   auth/         Guards, decorators, RBAC helpers, JWT utilities
   data/         DTOs, enums, role hierarchy helpers
 ```
 
-- `apps/api`: Exposes REST endpoints, connects to PostgreSQL via TypeORM, enforces authorization through shared guards.
-- `apps/dashboard`: Angular client served via Nx, consumes the API with interceptors that attach JWT tokens and renders RBAC-aware UI states.
+- `apps/backend`: Exposes REST endpoints, connects to PostgreSQL via TypeORM, enforces authorization through shared guards.
+- `apps/frontend`: Angular client served via Nx, consumes the API with interceptors that attach JWT tokens and renders RBAC-aware UI states.
 - `libs/data`: Houses DTO definitions, role constants, and shared validation logic to avoid drift between services.
 - `libs/auth`: Centralizes RBAC guard/decorator definitions, ensuring consistent permission checks across controllers.
 
@@ -50,16 +50,16 @@ libs/
    ```
 4. **Run database migrations / seed (optional)**
    ```bash
-   nx run api:migrate
-   nx run api:seed
+   nx run backend:migrate
+   nx run backend:seed
    ```
 5. **Start backend API**
    ```bash
-   nx serve api
+   nx serve backend
    ```
 6. **Start frontend dashboard**
    ```bash
-   nx serve dashboard
+   nx serve frontend
    ```
 7. Access the dashboard at `http://localhost:4200` (API served at `http://localhost:3000/api`).
 

@@ -1,7 +1,7 @@
 {
-  "name": "api",
+  "name": "backend",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api/src",
+  "sourceRoot": "apps/backend/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -10,7 +10,7 @@
       "options": {
         "command": "webpack-cli build",
         "args": ["--node-env=production"],
-        "cwd": "apps/api"
+        "cwd": "apps/backend"
       },
       "configurations": {
         "development": {
@@ -33,7 +33,7 @@
     "copy-workspace-modules": {
       "dependsOn": ["build"],
       "cache": true,
-      "outputs": ["{workspaceRoot}/dist/apps/api/workspace_modules"],
+      "outputs": ["{workspaceRoot}/dist/apps/backend/workspace_modules"],
       "executor": "@nx/js:copy-workspace-modules",
       "options": {
         "buildTarget": "build"
@@ -49,15 +49,15 @@
       "defaultConfiguration": "development",
       "dependsOn": ["build"],
       "options": {
-        "buildTarget": "api:build",
+        "buildTarget": "backend:build",
         "runBuildTargetDependencies": false
       },
       "configurations": {
         "development": {
-          "buildTarget": "api:build:development"
+          "buildTarget": "backend:build:development"
         },
         "production": {
-          "buildTarget": "api:build:production"
+          "buildTarget": "backend:build:production"
         }
       }
     },
@@ -65,7 +65,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/api/jest.config.ts",
+        "jestConfig": "apps/backend/jest.config.ts",
         "passWithNoTests": true
       }
     }
