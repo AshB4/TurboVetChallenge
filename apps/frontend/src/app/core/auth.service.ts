@@ -25,7 +25,7 @@ export class AuthService {
   login(credentials: LoginDto): Observable<void> {
     // Mock login for demo
     const mockToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoib3duZXJAdHVyYm92ZXQudGVzdCIsIm9yZ2FuaXphdGlvbklkIjoxLCJyb2xlcyI6WyJPd25lciJdfQ.mock';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoidmV0ZXJhbkB0dXJib3ZldC50ZXN0Iiwib3JnYW5pemF0aW9uSWQiOjEsInJvbGVzIjpbIk9XTkVSIl19.mock';
     this.persistToken(mockToken);
     return of(void 0);
   }

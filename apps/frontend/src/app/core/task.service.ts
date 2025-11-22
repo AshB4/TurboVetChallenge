@@ -44,7 +44,19 @@ export class TaskService {
   }
 
   create(payload: CreateTaskDto): Observable<TaskDto> {
-    return this.http.post<TaskDto>('/api/tasks', payload);
+    // Mock create for demo
+    const mockTask: TaskDto = {
+      id: Math.random().toString(),
+      title: payload.title,
+      description: payload.description,
+      status: TaskStatus.TODO,
+      category: payload.category || TaskCategory.WORK,
+      organizationId: '1',
+      ownerId: '1',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    return of(mockTask);
   }
 
   update(id: string, payload: UpdateTaskDto): Observable<TaskDto> {

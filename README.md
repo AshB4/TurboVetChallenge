@@ -50,8 +50,8 @@ libs/
    ```
 4. **Run database migrations / seed (optional)**
    ```bash
-   nx run backend:migrate
-   nx run backend:seed
+nx run backend:migrate
+nx run backend:seed
    ```
 5. **Start backend API**
    ```bash

@@ -2,7 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { CdkDrag, CdkDropList, DragDropModule, CdkDragDrop } from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDropList,
+  DragDropModule,
+  CdkDragDrop,
+} from '@angular/cdk/drag-drop';
 import {
   CreateTaskDto,
   Role,
@@ -12,6 +17,7 @@ import {
 } from '@vettech/data';
 import { AuthService } from '../../core/auth.service';
 import { TaskStore } from '../../core/task.store';
+import { ThemeService } from '../../core/theme.service';
 
 interface ColumnConfig {
   status: TaskStatus;
@@ -36,15 +42,26 @@ export class TaskBoardComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   protected readonly auth = inject(AuthService);
   protected readonly store = inject(TaskStore);
+  protected readonly theme = inject(ThemeService);
 
   readonly statuses: ColumnConfig[] = [
     { status: TaskStatus.TODO, title: 'To do', description: 'Queued items' },
-    { status: TaskStatus.IN_PROGRESS, title: 'In progress', description: 'Active work' },
-    { status: TaskStatus.DONE, title: 'Completed', description: 'Shipped or resolved' },
+    {
+      status: TaskStatus.IN_PROGRESS,
+      title: 'In progress',
+      description: 'Active work',
+    },
+    {
+      status: TaskStatus.DONE,
+      title: 'Completed',
+      description: 'Shipped or resolved',
+    },
   ];
 
   readonly categories = Object.values(TaskCategory);
-  readonly canMutate = computed(() => this.auth.hasRole(Role.ADMIN) || this.auth.hasRole(Role.OWNER));
+  readonly canMutate = computed(
+    () => this.auth.hasRole(Role.ADMIN) || this.auth.hasRole(Role.OWNER)
+  );
 
   readonly createForm = this.fb.nonNullable.group({
     title: ['', [Validators.required, Validators.maxLength(120)]],

@@ -13,4 +13,4 @@ tsconfigPaths.register({
   paths: tsConfig.compilerOptions.paths,
 });
 
-require('../api/src/seed');
+require('../apps/backend/src/seed');

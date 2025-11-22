@@ -2,7 +2,13 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateTaskDto, Permission, Role, TaskCategory, TaskStatus } from '@vettech/data';
+import {
+  CreateTaskDto,
+  Permission,
+  Role,
+  TaskCategory,
+  TaskStatus,
+} from '@vettech/data';
 import {
   Organization,
   Permission as PermissionEntity,
@@ -19,17 +25,31 @@ const dataSource = new DataSource(
     ? {
         type: 'postgres',
         url: process.env.DB_URL,
-        entities: [Organization, PermissionEntity, RoleEntity, Task, User, UserOrganizationRole],
+        entities: [
+          Organization,
+          PermissionEntity,
+          RoleEntity,
+          Task,
+          User,
+          UserOrganizationRole,
+        ],
         synchronize: true,
         logging: false,
       }
     : {
         type: 'sqlite',
         database: process.env.DB_URL ?? 'apps/api/dev.db',
-        entities: [Organization, PermissionEntity, RoleEntity, Task, User, UserOrganizationRole],
+        entities: [
+          Organization,
+          PermissionEntity,
+          RoleEntity,
+          Task,
+          User,
+          UserOrganizationRole,
+        ],
         synchronize: true,
         logging: false,
-      },
+      }
 );
 
 async function seed() {
@@ -42,18 +62,20 @@ async function seed() {
   const taskRepo = dataSource.getRepository(Task);
   const assignmentRepo = dataSource.getRepository(UserOrganizationRole);
 
-  await assignmentRepo.delete({});
-  await taskRepo.delete({});
-  await userRepo.delete({});
-  await orgRepo.delete({});
-  await roleRepo.delete({});
-  await permissionRepo.delete({});
+  await dataSource.query('DELETE FROM user_organization_roles');
+  await dataSource.query('DELETE FROM tasks');
+  await dataSource.query('DELETE FROM users');
+  await dataSource.query('DELETE FROM organizations');
+  await dataSource.query('DELETE FROM roles');
+  await dataSource.query('DELETE FROM permissions');
 
-  const permissions = Object.values(Permission).map((key) => permissionRepo.create({ key }));
+  const permissions = Object.values(Permission).map((key) =>
+    permissionRepo.create({ key })
+  );
   await permissionRepo.save(permissions);
 
   const permissionMap = new Map(
-    permissions.map((perm) => [perm.key as Permission, perm]),
+    permissions.map((perm) => [perm.key as Permission, perm])
   );
 
   const ownerRole = roleRepo.create({
@@ -80,7 +102,10 @@ async function seed() {
   await roleRepo.save([ownerRole, adminRole, viewerRole]);
 
   const parentOrg = orgRepo.create({ name: 'TurboVet Clinics' });
-  const childOrg = orgRepo.create({ name: 'TurboVet Downtown', parent: parentOrg });
+  const childOrg = orgRepo.create({
+    name: 'TurboVet Downtown',
+    parent: parentOrg,
+  });
   await orgRepo.save([parentOrg, childOrg]);
 
   const passwordHash = await bcrypt.hash('P@ssw0rd!', 10);
@@ -107,9 +132,21 @@ async function seed() {
   await userRepo.save([owner, admin, viewer]);
 
   const assignments = [
-    assignmentRepo.create({ user: owner, organization: childOrg, role: Role.OWNER }),
-    assignmentRepo.create({ user: admin, organization: childOrg, role: Role.ADMIN }),
-    assignmentRepo.create({ user: viewer, organization: childOrg, role: Role.VIEWER }),
+    assignmentRepo.create({
+      user: owner,
+      organization: childOrg,
+      role: Role.OWNER,
+    }),
+    assignmentRepo.create({
+      user: admin,
+      organization: childOrg,
+      role: Role.ADMIN,
+    }),
+    assignmentRepo.create({
+      user: viewer,
+      organization: childOrg,
+      role: Role.VIEWER,
+    }),
   ];
   await assignmentRepo.save(assignments);
 
