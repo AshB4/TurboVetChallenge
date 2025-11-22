@@ -21,7 +21,7 @@ export class AuditLogService {
       this.buffer.shift();
     }
     const { username, organizationId, action, decision, detail } = entry;
-    // eslint-disable-next-line no-console
+   
     console.log(
       `[audit] user=${username ?? 'anonymous'} org=${organizationId ?? 'n/a'} action=${action} decision=${decision}` +
         (detail ? ` detail=${detail}` : ''),

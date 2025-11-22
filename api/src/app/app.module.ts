@@ -20,6 +20,6 @@ import { AuthController } from '../app/auth/auth.controller';
     }),
     TypeOrmModule.forFeature([User, Organization, Task, Role, Permission]),
   ],
-  controllers: [AuthController], // ✅ add this
+  controllers: [AuthController],
 })
 export class AppModule {}

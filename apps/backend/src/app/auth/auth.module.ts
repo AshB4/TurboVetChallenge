@@ -13,7 +13,7 @@ function toSeconds(v: string | number, fallback = 3600): number {
   if (typeof v === 'number' && Number.isFinite(v)) return v;
   if (typeof v !== 'string') return fallback;
 
-  // supports "5000s", "30m", "2h", "1d", or plain "3600"
+  
   const m = v.trim().match(/^(\d+)\s*([smhd])?$/i);
   if (!m) return fallback;
   const n = parseInt(m[1], 10);
@@ -35,7 +35,7 @@ function toSeconds(v: string | number, fallback = 3600): number {
         return {
           secret: config.get<string>('JWT_SECRET', 'local-dev-secret'),
           signOptions: {
-            expiresIn: toSeconds(raw), // <-- number (seconds)
+            expiresIn: toSeconds(raw),
           },
         };
       },

@@ -15,7 +15,7 @@ export class TaskService {
   private readonly http = inject(HttpClient);
 
   list(): Observable<TaskDto[]> {
-    // Mock tasks for demo
+  
     const mockTasks: TaskDto[] = [
       {
         id: '1',
@@ -44,7 +44,7 @@ export class TaskService {
   }
 
   create(payload: CreateTaskDto): Observable<TaskDto> {
-    // Mock create for demo
+  
     const mockTask: TaskDto = {
       id: Math.random().toString(),
       title: payload.title,

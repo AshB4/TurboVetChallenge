@@ -8,22 +8,19 @@ import { INestApplication } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Make all routes available under /api while allowing /json to stay public
+ 
   app.setGlobalPrefix('api', { exclude: ['json'] });
 
-  // Enable graceful shutdown
   app.enableShutdownHooks();
 
-  // Start server
   const port = process.env.PORT ? Number(process.env.PORT) : 3000;
   await app.listen(port);
 
-  // Print all routes after server starts
   printRoutes(app);
 
   console.log(`🚀 API running at http://localhost:${port}/api`);
 
-  // Graceful shutdown on SIGINT/SIGTERM
+
   process.on('SIGINT', async () => {
     console.log('Shutting down gracefully...');
     await app.close();
@@ -37,7 +34,7 @@ async function bootstrap() {
 }
 
 function printRoutes(app: INestApplication) {
-  // Works for the default Express adapter
+
   const server: any = (app as any).getHttpAdapter().getHttpServer();
   const router = server._events?.request?._router;
   if (!router?.stack) {
