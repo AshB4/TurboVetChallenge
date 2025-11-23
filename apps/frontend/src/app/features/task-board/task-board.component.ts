@@ -108,9 +108,6 @@ export class TaskBoardComponent implements OnInit {
 
   drop(event: CdkDragDrop<TaskDto[]>, targetStatus: TaskStatus) {
     const task = event.item.data as TaskDto;
-    if (!this.canMutate()) {
-      return;
-    }
     if (task.status === targetStatus) {
       return;
     }
