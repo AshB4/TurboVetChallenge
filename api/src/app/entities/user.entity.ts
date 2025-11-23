@@ -1,1 +1,1 @@
-export * from '../../../../apps/api/src/app/entities/user.entity';
+export * from '../../../../apps/backend/src/app/entities/user.entity';

@@ -14,10 +14,10 @@ export interface TaskCardData {
 }
 
 const STATUS_LABEL: Record<TaskStatus, string> = {
-  todo: 'To Do',
-  'in-progress': 'In Progress',
-  'in-review': 'In Review',
-  done: 'Done',
+  todo: 'Standby',
+  'in-progress': 'Mission Active',
+  'in-review': 'Debriefing',
+  done: 'Mission Accomplished',
 };
 
 @Component({

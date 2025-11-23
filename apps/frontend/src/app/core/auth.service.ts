@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, map, of, tap } from 'rxjs';
 import { LoginDto, JwtPayloadDto, Role, roleSatisfies } from '@vettech/data';
@@ -12,6 +13,7 @@ const STORAGE_KEY = 'vettech.jwt';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);
   private readonly subject = new BehaviorSubject<UserContext | null>(
     this.restore()
   );
@@ -23,7 +25,6 @@ export class AuthService {
   }
 
   login(credentials: LoginDto): Observable<void> {
-    
     const mockToken =
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoidmV0ZXJhbkB0dXJib3ZldC50ZXN0Iiwib3JnYW5pemF0aW9uSWQiOjEsInJvbGVzIjpbIk9XTkVSIl19.mock';
     this.persistToken(mockToken);
@@ -33,6 +34,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(STORAGE_KEY);
     this.subject.next(null);
+    this.router.navigate(['/login']);
   }
 
   get token(): string | null {
