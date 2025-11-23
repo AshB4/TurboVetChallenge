@@ -14,37 +14,36 @@ import {
 export class TaskService {
   private readonly http = inject(HttpClient);
 
+  private mockTasks: TaskDto[] = [
+    {
+      id: '1',
+      title: 'Update vaccination reminders',
+      description: 'Review and update the reminder schedule for Q4.',
+      status: TaskStatus.IN_PROGRESS,
+      category: TaskCategory.WORK,
+      organizationId: '1',
+      ownerId: '1',
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z',
+    },
+    {
+      id: '2',
+      title: 'Schedule team offsite',
+      description: 'Coordinate venue and agenda for the annual offsite.',
+      status: TaskStatus.TODO,
+      category: TaskCategory.WORK,
+      organizationId: '1',
+      ownerId: '1',
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z',
+    },
+  ];
+
   list(): Observable<TaskDto[]> {
-  
-    const mockTasks: TaskDto[] = [
-      {
-        id: '1',
-        title: 'Update vaccination reminders',
-        description: 'Review and update the reminder schedule for Q4.',
-        status: TaskStatus.IN_PROGRESS,
-        category: TaskCategory.WORK,
-        organizationId: '1',
-        ownerId: '1',
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z',
-      },
-      {
-        id: '2',
-        title: 'Schedule team offsite',
-        description: 'Coordinate venue and agenda for the annual offsite.',
-        status: TaskStatus.TODO,
-        category: TaskCategory.WORK,
-        organizationId: '1',
-        ownerId: '1',
-        createdAt: '2023-01-01T00:00:00.000Z',
-        updatedAt: '2023-01-01T00:00:00.000Z',
-      },
-    ];
-    return of(mockTasks);
+    return of(this.mockTasks);
   }
 
   create(payload: CreateTaskDto): Observable<TaskDto> {
-  
     const mockTask: TaskDto = {
       id: Math.random().toString(),
       title: payload.title,
@@ -60,7 +59,16 @@ export class TaskService {
   }
 
   update(id: string, payload: UpdateTaskDto): Observable<TaskDto> {
-    return this.http.put<TaskDto>(`/api/tasks/${id}`, payload);
+    const task = this.mockTasks.find((t) => t.id === id);
+    if (!task) throw new Error('Task not found');
+    const updated: TaskDto = {
+      ...task,
+      ...payload,
+      updatedAt: new Date().toISOString(),
+    };
+    const index = this.mockTasks.findIndex((t) => t.id === id);
+    this.mockTasks[index] = updated;
+    return of(updated);
   }
 
   remove(id: string): Observable<void> {
