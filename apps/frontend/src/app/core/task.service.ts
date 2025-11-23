@@ -72,7 +72,10 @@ export class TaskService {
   }
 
   remove(id: string): Observable<void> {
-    return this.http.delete<void>(`/api/tasks/${id}`);
+    const index = this.mockTasks.findIndex((t) => t.id === id);
+    if (index === -1) throw new Error('Task not found');
+    this.mockTasks.splice(index, 1);
+    return of(void 0);
   }
 
   get(id: string): Observable<TaskDto> {
